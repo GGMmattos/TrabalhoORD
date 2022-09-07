@@ -59,9 +59,8 @@ int proximoRegistro(char registro[64], FILE *file)
             contPipe += 1; //Conta os pipes quando encontrar, sendo que 4 pipes contituem 1 registro
         }
         tam += 1; //Com o acrecimo o programa trabalha em cima de outro registro com o mesmo procedimento acima.
-
     return 1;
-}
+    }
 }
 
 int main(int argc, char *argv[])
