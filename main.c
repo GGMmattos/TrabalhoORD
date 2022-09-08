@@ -6,65 +6,41 @@
 
 void importacao(char nomeArquivoImpotacao[])
     {
-        FILE *arquivoOriginal;  //Contem arquivo que contém os jogos
+        FILE *arquivoOriginal;  //arquivo que contém os jogos
         FILE *novoArquivo;      //Contém o novo arquivo com dados copiados do arquivo acima 
-        int cabecalho = -1;
-        int tamreg;
+        int comp_reg;
         char buffer[MAX_REC_SIZE];
         
 
         arquivoOriginal = fopen(nomeArquivoImpotacao, "r");
         novoArquivo = fopen("dados.dat", "w");
 
-        /*if (arquivoOriginal == NULL || novoArquivo == NULL) //Condicional para saber se algum arquivo deu erro ao abrir
+    while (!feof(arquivoOriginal))
+    {
+        int sucesso = proximoRegistro(buffer, arquivoOriginal);
+        //printf("\n%s\n", buffer);
+        fflush(stdin);
+        comp_reg = strlen(buffer); //calcula o tamanho do registro que esta no buffer
+        fwrite(&comp_reg, sizeof(comp_reg), 1, novoArquivo); //grava o tamanho
+        fwrite(buffer, sizeof(char),comp_reg, novoArquivo); // grava o buffer como uma sequencia de bytes
+        printf("%d", comp_reg);
+        if (sucesso == 1)
         {
-            fprintf(stderr, "Não foi possível abrir os arquivos");
-            exit(EXIT_FAILURE);
-        }*/
-        /* 
-             tamreg = strlen(buffer); //calcula o tamanho do registro que esta no buffer
-             fwrite(&rec_lgth, sizeof(rec_lgth), 1, fd); //grava o tamanho
-             fwrite(buffer, sizeof(char), rec_lgth, fd); // grava o buffer como uma sequencia de bytes*/
-        
-        //fwrite(&cabecalho, sizeof(int), 1, novoArquivo);
-
-
-
-        //while (!feof(arquivoOriginal))
-        //{
-            buffer[0] = '\0'; //zera o buffer
-            int sucessor = proximoRegistro(buffer, arquivoOriginal);
-            printf("testre");
-            if (sucessor == 1)
-            {  
-                tamreg = strlen(buffer);
-                printf("%d", tamreg);
-                fwrite(&tamreg, sizeof(tamreg), 1, novoArquivo);
-                fwrite(buffer, sizeof(char), tamreg, novoArquivo);
-            }
-            
-        //}
-        fclose(arquivoOriginal);
-        fclose(novoArquivo);
-        
+            fwrite(buffer, sizeof(char), 64, novoArquivo);
+        }
     }
+    fclose(arquivoOriginal);
+    fclose(novoArquivo);       
+}
 
 int proximoRegistro(char registro[64], FILE *file)
 {
     int contPipe = 0, tam = 0;
     char c;
 
-    //memset(registro, '\0', 64); //colocar o \0 até dar 64  //memset preenche uma quantidade de uma determinada área da memória com um dado valor
-
-    while (contPipe < 6 && tam < 64)
+    while (contPipe < 6)
     {   
-
         c = fgetc(file);
-
-        /* if (c == EOF) //verifica se é um valor vazio
-        {
-            return -1;
-        }*/
         
         registro[tam] = c; //atribui o caractere ao registro 
 
@@ -73,8 +49,11 @@ int proximoRegistro(char registro[64], FILE *file)
             contPipe += 1; //Conta os pipes quando encontrar, sendo que 4 pipes contituem 1 registro
         }
         tam += 1; //Com o acrecimo o programa trabalha em cima de outro registro com o mesmo procedimento acima.
-    return 1;
-    }
+     
+        //printf("%c", c);
+    }        
+
+     return 1;    
 }
 
 int main(int argc, char *argv[])
