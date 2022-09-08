@@ -9,24 +9,24 @@ void importacao(char nomeArquivoImpotacao[])
         FILE *arquivoOriginal;  //arquivo que contém os jogos
         FILE *novoArquivo;      //Contém o novo arquivo com dados copiados do arquivo acima 
         int comp_reg;
-        char buffer[100];
+        char buffer[MAX_REC_SIZE];
     
         arquivoOriginal = fopen(nomeArquivoImpotacao, "r");
         novoArquivo = fopen("dados", "w");
 
-    //while (!feof(arquivoOriginal))
-    //{
+    while (!feof(arquivoOriginal))
+    {
         int sucesso = proximoRegistro(buffer, arquivoOriginal);
 
         comp_reg = strlen(buffer); //calcula o tamanho do registro que esta no buffer
         fwrite(&comp_reg, sizeof(comp_reg), 1, novoArquivo); //grava o tamanho
-        printf("\n%s\n", buffer);
         fwrite(buffer, sizeof(char),comp_reg, novoArquivo); // grava o buffer como uma sequencia de bytes
-        // if (sucesso == 1)
-        // {
-        //     fwrite(buffer, sizeof(char), 64, novoArquivo);
-        // }
 
+        if (sucesso == 1)
+        {
+            fwrite(buffer, sizeof(char), comp_reg, novoArquivo);
+        }
+    }
         // printf("\n%d\n", comp_reg);
     }
 

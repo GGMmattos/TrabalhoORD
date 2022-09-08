@@ -1,0 +1,5 @@
+1|The Legend of Zelda: Majora's Mask|2000|Action-adventure|Nintendo|Nintendo 64|
+2|Grand Theft Auto: Vice City|2002|Action-adventure|Rockstar Games|PlayStation 2|
+3|Ultima Online|1997|MMORPG|Electronic Arts|PC|
+4|SimCity 2000|1993|City-building|Maxis|Macintosh|
+5|Duke Nukem 3D|1996|First-person shooter|GT Interactive|PC|
