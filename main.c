@@ -8,28 +8,21 @@ void importacao(char nomeArquivoImpotacao[])
     {
         FILE *arquivoOriginal;  //arquivo que contém os jogos
         FILE *novoArquivo;      //Contém o novo arquivo com dados copiados do arquivo acima 
-        int comp_reg;
+        short comp_reg;
         char buffer[MAX_REC_SIZE];
     
         arquivoOriginal = fopen(nomeArquivoImpotacao, "r");
         novoArquivo = fopen("dados", "w");
-
-    //while (!feof(arquivoOriginal))
-    //{
+      while (!feof(arquivoOriginal))
+      {
         int sucesso = proximoRegistro(buffer, arquivoOriginal);
-        comp_reg = strlen(buffer); //calcula o tamanho do registro que esta no buffer
-        //printf("\n%d\n", comp_reg);
-        //printf("%s", buffer);
-        fwrite(&comp_reg, sizeof(comp_reg), 1, novoArquivo); //grava o tamanho
-        fwrite(buffer, sizeof(char),comp_reg, novoArquivo); // grava o buffer como uma sequencia de bytes
-
-        // if (sucesso == 1)
-        // {
-        //     fwrite(buffer, sizeof(char), comp_reg, novoArquivo);
-        // }
-    //}
-        // printf("\n%d\n", comp_reg);
-
+         if (sucesso == 1)
+         {  
+            comp_reg = strlen(buffer);
+            fwrite(&comp_reg, sizeof(comp_reg), 1, novoArquivo); //grava o tamanho
+            fwrite(buffer, sizeof(char),comp_reg, novoArquivo); // grava o buffer como uma sequencia de bytes
+         }
+      }
     fclose(arquivoOriginal);
     fclose(novoArquivo);  
     }
@@ -37,15 +30,20 @@ void importacao(char nomeArquivoImpotacao[])
  
 //}
 
-int proximoRegistro(char registro[100], FILE *file)
+int proximoRegistro(char registro[64], FILE *file)
 {
     int contPipe = 0, i = 0;
     char c;
     
-
-    while (contPipe < 5 && c != '\n')
+    //memset(registro, '\0', 100); //colocar o \0 até dar 64 
+    while (contPipe < 6 ||  c == '\0')
     {   
         c = fgetc(file);
+        if (c == EOF)
+        {
+            return -1;
+        }
+
         registro[i] = c; //atribui o caractere ao registro 
         i += 1;
 
@@ -54,11 +52,9 @@ int proximoRegistro(char registro[100], FILE *file)
             contPipe += 1; //Conta os pipes quando encontrar, sendo que 4 pipes contituem 1 registro
         }
        
-     
-        //printf("%c", c);
     }        
-    registro[i] = '\0';   
-    return 1;    
+    registro[i] = '\0';  
+    return 1;
 }
 
 int main(int argc, char *argv[])
