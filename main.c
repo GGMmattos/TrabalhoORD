@@ -14,47 +14,51 @@ void importacao(char nomeArquivoImpotacao[])
         arquivoOriginal = fopen(nomeArquivoImpotacao, "r");
         novoArquivo = fopen("dados", "w");
 
-    while (!feof(arquivoOriginal))
-    {
+    //while (!feof(arquivoOriginal))
+    //{
         int sucesso = proximoRegistro(buffer, arquivoOriginal);
-
         comp_reg = strlen(buffer); //calcula o tamanho do registro que esta no buffer
+        //printf("\n%d\n", comp_reg);
+        //printf("%s", buffer);
         fwrite(&comp_reg, sizeof(comp_reg), 1, novoArquivo); //grava o tamanho
         fwrite(buffer, sizeof(char),comp_reg, novoArquivo); // grava o buffer como uma sequencia de bytes
 
-        if (sucesso == 1)
-        {
-            fwrite(buffer, sizeof(char), comp_reg, novoArquivo);
-        }
-    }
+        // if (sucesso == 1)
+        // {
+        //     fwrite(buffer, sizeof(char), comp_reg, novoArquivo);
+        // }
+    //}
         // printf("\n%d\n", comp_reg);
-    }
 
     fclose(arquivoOriginal);
-    fclose(novoArquivo);   
+    fclose(novoArquivo);  
+    }
+
+ 
 //}
 
 int proximoRegistro(char registro[100], FILE *file)
 {
-    int contPipe = 0, tam = 0;
+    int contPipe = 0, i = 0;
     char c;
+    
 
-    while (contPipe < 6)
+    while (contPipe < 5 && c != '\n')
     {   
         c = fgetc(file);
-        
-        registro[tam] = c; //atribui o caractere ao registro 
+        registro[i] = c; //atribui o caractere ao registro 
+        i += 1;
 
         if (c == '|')
         {
             contPipe += 1; //Conta os pipes quando encontrar, sendo que 4 pipes contituem 1 registro
         }
-        tam += 1; //Com o acrecimo o programa trabalha em cima de outro registro com o mesmo procedimento acima.
+       
      
         //printf("%c", c);
     }        
-
-     return 1;    
+    registro[i] = '\0';   
+    return 1;    
 }
 
 int main(int argc, char *argv[])
