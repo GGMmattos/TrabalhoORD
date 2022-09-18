@@ -5,7 +5,7 @@
 int main()
 {
 
-    char c[] = "57|Thief II: The Metal Age|2000|Stealth|Eidos Interactive|PC|";
+    char c[] = "1|The Legend of Zelda: Majora's Mask|2000|Action-adventure|Nintendo|Nintendo 64|";
 
     int tamanho = strlen(c);
 
